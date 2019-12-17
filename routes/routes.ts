@@ -1,6 +1,8 @@
 import * as express from "express";
 
 import usersRouter = require('./users');
+import tasksRouter = require('./tasks');
+import tasksHistoryRouter = require('./tasks_history');
 
 import path = require('path');
 const config = require(path.resolve('server'));
@@ -45,6 +47,9 @@ export = function (app: express.Application) {
     app.use(function(req: express.Request, res: express.Response, next: express.NextFunction) {
         jwtCheck(req, res, next);
     });
+
+    app.use('/tasks', tasksRouter);
+    app.use('/history', tasksHistoryRouter);
 
     // catch 404 and forward to error handler
     app.use(function(req: express.Request, res: express.Response, next: express.NextFunction) {
