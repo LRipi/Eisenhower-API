@@ -6,6 +6,7 @@ const routerOptions: express.RouterOptions = {
 };
 const router: express.Router = express.Router(routerOptions);
 const Tasks = require('../models/Tasks');
+const TasksHistory = require('../models/TasksHistory');
 
 //----------------------------------------------
 //                  GETTERS                    |
@@ -22,6 +23,18 @@ router.get('/:id([0-9]+)?',
         next(e);
     }
 });
+
+router.get('/history/:id([0-9]+)?',
+    async function (req: any, res: express.Response, next: express.NextFunction) {
+        try {
+            const result: Promise<any> = req.params.id
+                ? await TasksHistory.getTaskById(req.decoded.userId, req.params.id)
+                : await TasksHistory.getAllUserTasks(req.decoded.userId);
+            res.json({success: true, tasks: result});
+        } catch (e) {
+            next(e);
+        }
+    });
 
 //----------------------------------------------
 //                  SETTERS                    |
@@ -55,7 +68,7 @@ router.put('/:id([0-9]+)', async function (req: any, res: express.Response, next
         if (!(req.body && req.body.urgence && req.body.importance && req.body.title
             && req.body.description && req.body.deadline))
             throw { code: 422, message: 'Missing parameters'};
-        await Tasks.updateTasks(req.params.id, req.decoded.userId, req.body);
+        await Tasks.updateTasks(req.params.id, req.body);
         res.json({success: true});
     } catch (e) {
         next(e);
@@ -64,7 +77,9 @@ router.put('/:id([0-9]+)', async function (req: any, res: express.Response, next
 
 router.delete('/:id([0-9]+)', async function (req: any, res: express.Response, next: express.NextFunction) {
     try {
-        await Tasks.deleteTasks(req.params.id, req.decoded.userId);
+        const toDelete: Promise<any> = await Tasks.getTaskById(req.params.id);
+        await TasksHistory.addTasksHistory(toDelete);
+        await Tasks.deleteTasks(req.params.id);
         res.status(204);
     } catch (e) {
         next(e);
