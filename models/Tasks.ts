@@ -19,7 +19,9 @@ export async function addTasks(data: {
     deadline: Date
 }): Promise<any> {
     try {
-        await db('INSERT INTO tasks VALUES (?)', [data])
+        await db(`INSERT INTO tasks (id_user, urgence, importance, title, description, deadline)
+            VALUES (?, ?, ?, ?, ?, ?)`, [data.id_user, data.urgence, data.importance,
+            data.title, data.description, data.deadline])
     } catch (e) {
         throw e;
     }

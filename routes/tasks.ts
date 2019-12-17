@@ -59,6 +59,7 @@ router.post('/', async function (req: any, res: express.Response, next: express.
         await Tasks.addTasks(datas);
         res.status(201).json({success: true});
     } catch (e) {
+        console.error(e);
         next(e);
     }
 });
@@ -77,14 +78,17 @@ router.put('/:id([0-9]+)', async function (req: any, res: express.Response, next
 
 router.delete('/:id([0-9]+)', async function (req: any, res: express.Response, next: express.NextFunction) {
     try {
-        const toDelete: Promise<any> = await Tasks.getTaskById(req.params.id);
-        await TasksHistory.addTasksHistory(toDelete);
+        const toDelete: [Promise<any>] = await Tasks.getTaskById(req.decoded.userId, req.params.id);
+        await TasksHistory.addTasksHistory(toDelete[0]);
         await Tasks.deleteTasks(req.params.id);
-        res.status(204);
+        res.status(204).json({success: true});
     } catch (e) {
+        console.log(e);
         next(e);
     }
 });
 
+if (process.env.DEBUG === 'true')
+    console.log('[\x1b[31mINFO\x1b[0m] Tasks routes : \x1b[32mOK\x1b[0m');
 
 export = router;

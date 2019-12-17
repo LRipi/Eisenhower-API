@@ -22,7 +22,9 @@ export async function addTasksHistory(data: {
     date_creation: Date
 }): Promise<any> {
     try {
-        await db('INSERT INTO tasks VALUES (?)', [data])
+        await db(`INSERT INTO tasks_history (id_user, urgence, importance, title, description, deadline, status, date_creation)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [data.id_user, data.urgence, data.importance,
+            data.title, data.description, data.deadline, data.status, data.date_creation])
     } catch (e) {
         throw e;
     }
