@@ -40,7 +40,7 @@ export = function (app: express.Application) {
     });
 
     app.get('/', function (req: express.Request, res: express.Response) {
-        res.send('API is alive ! (TEST4)');
+        res.send('API is alive ! (TEST5)');
     });
 
     app.use(function(req: express.Request, res: express.Response, next: express.NextFunction) {
