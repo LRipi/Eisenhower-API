@@ -1,9 +1,5 @@
 version: '3.7'
 services:
-  whale:
-    image: docker/whalesay
-    command: ["cowsay", "Containers are deployed !"]
-
   mysql:
     build: ./database
     restart: always
