@@ -15,8 +15,8 @@ const TasksHistory = require('../models/TasksHistory');
 router.get('/:id([0-9]+)?',
     async function (req: any, res: express.Response, next: express.NextFunction) {
     try {
-        const result: Promise<any> = req.params.id
-            ? await Tasks.getTaskById(req.decoded.userId, req.params.id)
+        const result: Promise<any> = req.query
+            ? await Tasks.getTaskByParameter(req.decoded.userId, req.query)
             : await Tasks.getAllUserTasks(req.decoded.userId);
         res.json({success: true, tasks: result});
     } catch (e) {
@@ -89,7 +89,7 @@ router.put('/:id([0-9]+)', async function (req: any, res: express.Response, next
 
 router.delete('/:id([0-9]+)', async function (req: any, res: express.Response, next: express.NextFunction) {
     try {
-        const toDelete: [Promise<any>] = await Tasks.getTaskById(req.decoded.userId, req.params.id);
+        const toDelete: [Promise<any>] = await Tasks.getTaskByParameter(req.decoded.userId, req.params.id);
         await TasksHistory.addTasksHistory(toDelete[0]);
         await Tasks.deleteTasks(req.params.id);
         res.status(204).json({success: true});
