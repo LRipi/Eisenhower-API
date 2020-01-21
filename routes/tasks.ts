@@ -51,7 +51,8 @@ router.post('/', async function (req: any, res: express.Response, next: express.
             importance: number,
             title: string,
             description: string,
-            deadline: Date
+            deadline: Date,
+            done: Boolean
         } = {
             ...req.body,
             id_user: req.decoded.userId

@@ -16,12 +16,13 @@ export async function addTasks(data: {
     importance: number,
     title: string,
     description: string,
-    deadline: Date
+    deadline: Date,
+    done: Boolean
 }): Promise<any> {
     try {
-        await db(`INSERT INTO tasks (id_user, urgence, importance, title, description, deadline)
-            VALUES (?, ?, ?, ?, ?, ?)`, [data.id_user, data.urgence, data.importance,
-            data.title, data.description, data.deadline])
+        await db(`INSERT INTO tasks (id_user, urgence, importance, title, description, deadline, done)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`, [data.id_user, data.urgence, data.importance,
+            data.title, data.description, data.deadline, data.done])
     } catch (e) {
         throw e;
     }
@@ -32,11 +33,12 @@ export async function updateTasks(id: number, data: {
     importance: number,
     title: string,
     description: string,
-    deadline: Date
+    deadline: Date,
+    done: Boolean
 }): Promise<any> {
     try {
-        await db('UPDATE tasks SET urgence = ?, importance = ?, title = ?, description = ?, deadline = ? WHERE id = ?',
-            [data.urgence, data.importance, data.title, data.description, data.deadline, id])
+        await db('UPDATE tasks SET done = ?, urgence = ?, importance = ?, title = ?, description = ?, deadline = ? WHERE id = ?',
+            [data.done, data.urgence, data.importance, data.title, data.description, data.deadline, id])
     } catch (e) {
         throw e;
     }
