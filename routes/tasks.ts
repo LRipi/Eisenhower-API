@@ -54,7 +54,7 @@ router.get('/total', async function (req: any, res: express.Response, next: expr
 router.post('/', async function (req: any, res: express.Response, next: express.NextFunction) {
     try {
         if (!(req.body && req.body.urgence && req.body.importance && req.body.title
-            && req.body.description && req.body.deadline))
+            && req.body.description && req.body.deadline && req.body.status))
             throw { code: 422, message: 'Missing parameters'};
         const datas: {
             id_user: number,
@@ -79,7 +79,7 @@ router.post('/', async function (req: any, res: express.Response, next: express.
 router.put('/:id([0-9]+)', async function (req: any, res: express.Response, next: express.NextFunction) {
     try {
         if (!(req.body && req.body.urgence && req.body.importance && req.body.title
-            && req.body.description && req.body.deadline))
+            && req.body.description && req.body.deadline && req.body.status))
             throw { code: 422, message: 'Missing parameters'};
         await Tasks.updateTasks(req.params.id, req.body);
         res.json({success: true});
