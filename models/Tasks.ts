@@ -3,7 +3,6 @@
 const db = require('../database/db')
 
 export async function getTaskByParameter(id_user: number, query: any): Promise<any> {
-    console.log("QUERY: ", query);
     let sql = 'SELECT * FROM tasks WHERE id_user = ?';
     sql += query.importance === 'true' ? ' AND importance >= 5 ' : ' AND importance < 5 ';
     sql += query.urgence === 'true' ? ' AND urgence >= 5 ' : ' AND urgence < 5 ';
