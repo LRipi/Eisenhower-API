@@ -37,6 +37,7 @@ router.post('/create',
 router.post('/login',
     async function (req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
+    	console.log(req.body);
         if (!req.body.login || !req.body.password)
             throw { code: 422, message: 'Missing parameter in body field' };
         const user: any = await User.getUserByLogin(req.body.login);

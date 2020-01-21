@@ -15,8 +15,8 @@ const TasksHistory = require('../models/TasksHistory');
 router.get('/:id([0-9]+)?',
     async function (req: any, res: express.Response, next: express.NextFunction) {
     try {
-        const result: Promise<any> = req.params.id
-            ? await Tasks.getTaskById(req.decoded.userId, req.params.id)
+        const result: Promise<any> = req.query.length
+            ? await Tasks.getTaskByParameter(req.decoded.userId, req.query)
             : await Tasks.getAllUserTasks(req.decoded.userId);
         res.json({success: true, tasks: result});
     } catch (e) {
@@ -24,17 +24,28 @@ router.get('/:id([0-9]+)?',
     }
 });
 
-router.get('/history/:id([0-9]+)?',
-    async function (req: any, res: express.Response, next: express.NextFunction) {
-        try {
-            const result: Promise<any> = req.params.id
-                ? await TasksHistory.getTaskById(req.decoded.userId, req.params.id)
-                : await TasksHistory.getAllUserTasks(req.decoded.userId);
-            res.json({success: true, tasks: result});
-        } catch (e) {
-            next(e);
-        }
-    });
+router.get('/history/:id([0-9]+)?', async function (req: any, res: express.Response, next: express.NextFunction) {
+    try {
+        const result: Promise<any> = req.params.id
+            ? await TasksHistory.getTaskById(req.decoded.userId, req.params.id)
+            : await TasksHistory.getAllUserTasks(req.decoded.userId);
+        res.json({success: true, tasks: result});
+    } catch (e) {
+        next(e);
+    }
+});
+
+router.get('/total', async function (req: any, res: express.Response, next: express.NextFunction) {
+   try {
+       if (!req.query.importance || !req.query.urgence)
+           throw { code: 422, message: "Missing parameters in query field." };
+       const result: Promise<any> = await Tasks.getNumberUserTasks(req.decoded.userId, req.query.importance, req.query.urgence);
+       // @ts-ignore
+       res.json({success: true, number: result[0].number_tasks});
+   } catch (e) {
+       next(e);
+   }
+});
 
 //----------------------------------------------
 //                  SETTERS                    |
@@ -79,7 +90,7 @@ router.put('/:id([0-9]+)', async function (req: any, res: express.Response, next
 
 router.delete('/:id([0-9]+)', async function (req: any, res: express.Response, next: express.NextFunction) {
     try {
-        const toDelete: [Promise<any>] = await Tasks.getTaskById(req.decoded.userId, req.params.id);
+        const toDelete: [Promise<any>] = await Tasks.getTaskByParameter(req.decoded.userId, req.params.id);
         await TasksHistory.addTasksHistory(toDelete[0]);
         await Tasks.deleteTasks(req.params.id);
         res.status(204).json({success: true});

@@ -2,12 +2,22 @@
 
 const db = require('../database/db')
 
-export async function getTaskById(id_user: number, id: number): Promise<any> {
-    return await db('SELECT * FROM tasks WHERE id = ? AND id_user = ?', [id, id_user])
+export async function getTaskByParameter(id_user: number, query: any): Promise<any> {
+    let sql = 'SELECT * FROM tasks WHERE id_user = ?';
+    sql += query.importance === 'true' ? ' AND importance >= 5 ' : ' AND importance < 5 ';
+    sql += query.urgence === 'true' ? ' AND urgence >= 5 ' : ' AND urgence < 5 ';
+    return await db(sql, id_user)
 }
 
 export async function getAllUserTasks(id_user: number): Promise<any> {
     return await db('SELECT * FROM tasks WHERE id_user = ?', id_user)
+}
+
+export async function getNumberUserTasks(id_user: number, importance: string, urgence: string): Promise<any> {
+    let sql: string = 'SELECT COUNT(*) AS number_tasks FROM tasks WHERE id_user = ?';
+    sql += importance === 'true' ? ' AND importance >= 5 ' : ' AND importance < 5 ';
+    sql += urgence === 'true' ? ' AND urgence >= 5 ' : ' AND urgence < 5 ';
+    return await db(sql, id_user);
 }
 
 export async function addTasks(data: {
