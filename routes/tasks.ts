@@ -16,7 +16,7 @@ router.get('/:id([0-9]+)?',
     async function (req: any, res: express.Response, next: express.NextFunction) {
     console.log("THIS FUNC", req.query);
     try {
-        const result: Promise<any> = req.query.length
+        const result: Promise<any> = (req.query.importance !== undefined && req.query.urgence !== undefined)
             ? await Tasks.getTaskByParameter(req.decoded.userId, req.query)
             : await Tasks.getAllUserTasks(req.decoded.userId);
         res.json({success: true, tasks: result});
