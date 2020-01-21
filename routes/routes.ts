@@ -7,6 +7,7 @@ import path = require('path');
 const config = require(path.resolve('server'));
 import ip = require('ip');
 import fs = require('fs');
+import bp = require('body-parser');
 import jwtCheck = require('./jwt');
 
 // Swagger to make docs
@@ -30,6 +31,7 @@ const swaggerOptions: {
 export = function (app: express.Application) {
     // Create route for the documentation
     app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(swaggerDocs, swaggerOptions));
+    app.use(bp.json());
     app.use('/users', usersRouter);
 
     app.get('/about.json', function (req: express.Request, res: express.Response) {

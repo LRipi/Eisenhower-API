@@ -15,7 +15,7 @@ const TasksHistory = require('../models/TasksHistory');
 router.get('/:id([0-9]+)?',
     async function (req: any, res: express.Response, next: express.NextFunction) {
     try {
-        const result: Promise<any> = req.query
+        const result: Promise<any> = req.query.length
             ? await Tasks.getTaskByParameter(req.decoded.userId, req.query)
             : await Tasks.getAllUserTasks(req.decoded.userId);
         res.json({success: true, tasks: result});
