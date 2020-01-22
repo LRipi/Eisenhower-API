@@ -88,6 +88,16 @@ router.put('/:id([0-9]+)', async function (req: any, res: express.Response, next
     }
 });
 
+router.delete('/all', async function (req: any, res: express.Response, next: express.NextFunction) {
+    try {
+        await Tasks.deleteAllTasks(req.decoded.userId);
+        res.status(204).json({success: true});
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
+});
+
 router.delete('/:id([0-9]+)', async function (req: any, res: express.Response, next: express.NextFunction) {
     try {
         const toDelete: [Promise<any>] = await Tasks.getTaskByParameter(req.decoded.userId, req.params.id);

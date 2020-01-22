@@ -57,3 +57,7 @@ export async function updateTasks(id: number, data: {
 export async function deleteTasks(id: number): Promise<any> {
     await db('DELETE FROM tasks WHERE id = ?', id)
 }
+
+export async function deleteAllTasks(id_user: number): Promise<any> {
+    await db('DELETE FROM tasks WHERE id_user = ?', id_user)
+}
