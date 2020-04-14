@@ -9,6 +9,10 @@ export async function getTaskByParameter(id_user: number, query: any): Promise<a
     return await db(sql, id_user)
 }
 
+export async function getTaskById(id: number): Promise<any> {
+    return await db('SELECT * FROM tasks WHERE id = ?', id)
+}
+
 export async function getAllUserTasks(id_user: number): Promise<any> {
     return await db('SELECT * FROM tasks WHERE id_user = ?', id_user)
 }

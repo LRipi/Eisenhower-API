@@ -100,7 +100,7 @@ router.delete('/all', async function (req: any, res: express.Response, next: exp
 
 router.delete('/:id([0-9]+)', async function (req: any, res: express.Response, next: express.NextFunction) {
     try {
-        const toDelete: [Promise<any>] = await Tasks.getTaskByParameter(req.decoded.userId, req.params.id);
+        const toDelete: [Promise<any>] = await Tasks.getTaskById(req.params.id);
         await TasksHistory.addTasksHistory(toDelete[0]);
         await Tasks.deleteTasks(req.params.id);
         res.status(204).json({success: true});
