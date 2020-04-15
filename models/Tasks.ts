@@ -36,7 +36,7 @@ export async function addTasks(data: {
     try {
         await db(`INSERT INTO tasks (id_user, urgence, importance, title, description, deadline, status)
             VALUES (?, ?, ?, ?, ?, ?, ?)`, [data.id_user, data.urgence, data.importance,
-            data.title, data.description, data.deadline, data.status])
+            data.title, data.description, new Date(data.deadline), data.status])
     } catch (e) {
         throw e;
     }
