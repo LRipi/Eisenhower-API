@@ -52,7 +52,7 @@ export async function updateTasks(id: number, data: {
 }): Promise<any> {
     try {
         await db('UPDATE tasks SET status = ?, urgence = ?, importance = ?, title = ?, description = ?, deadline = ? WHERE id = ?',
-            [data.status, data.urgence, data.importance, data.title, data.description, data.deadline, id])
+            [data.status, data.urgence, data.importance, data.title, data.description, new Date(data.deadline), id])
     } catch (e) {
         throw e;
     }
